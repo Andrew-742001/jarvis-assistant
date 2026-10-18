@@ -1,0 +1,40 @@
+name: jarvis-monitor
+
+on:
+  schedule:
+    - cron: "7 14-23/2 * * *"
+    - cron: "47 14 * * *"
+  workflow_dispatch:
+    inputs:
+      digest:
+        description: "Send the full daily briefing"
+        type: boolean
+        default: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check markets, school work and reminders
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CANVAS_URL: ${{ secrets.CANVAS_URL }}
+          CANVAS_TOKEN: ${{ secrets.CANVAS_TOKEN }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          JARVIS_TZ: America/Los_Angeles
+        run: |
+          if [ "${{ github.event.schedule }}" = "47 14 * * *" ] || [ "${{ inputs.digest }}" = "true" ]; then
+            python -m jarvis.monitor --digest
+          else
+            python -m jarvis.monitor
+          fi

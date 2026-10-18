@@ -88,5 +88,5 @@ tests/                     60 pytest tests (fake market + fake Canvas)
 
 ## 👤 Author
 
-**Htet Aung Shinn (Andrew)** — Data Science student, Evergreen Valley College
+**Htet Aung Shinn (Andrew)** — Data Science & Math student, Evergreen Valley College
 [Portfolio](https://andrew-742001.github.io) · [LinkedIn](https://linkedin.com/in/andrew-htet-aung-shinn-0899ab241) · [GitHub](https://github.com/Andrew-742001)
